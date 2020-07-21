@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
   s.source_files  = ['Sources/*.swift', 'Sources/PusherSwift-Only/*.swift']
 
-  s.dependency 'ReachabilitySwift', '~> 5.0'
+  s.dependency 'Reachability'
   s.dependency 'Starscream', '~> 3.1'
 
   s.ios.deployment_target = '8.0'
