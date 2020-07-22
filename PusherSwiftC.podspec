@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PusherSwiftC'
-  s.version          = '8.0.2'
+  s.version          = '8.0.3'
   s.summary          = 'A Pusher client library in Swift'
   s.homepage         = 'https://github.com/SuaMusica/pusher-websocket-swift'
   s.license          = 'MIT'
