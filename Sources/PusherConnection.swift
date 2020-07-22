@@ -1,6 +1,5 @@
 import Foundation
-import Reachability
-import Starscream
+// import Starscream
 
 @objcMembers
 @objc open class PusherConnection: NSObject {
@@ -38,49 +37,6 @@ import Starscream
             setConnectionStateToConnectedAndAttemptSubscriptions()
         }
     }
-
-    open lazy var reachability: Reachability? = {
-        let reachability = try? Reachability()
-        reachability?.whenReachable = { [weak self] reachability in
-            guard let self = self else {
-                print("Your Pusher instance has probably become deallocated. See https://github.com/pusher/pusher-websocket-swift/issues/109 for more information")
-                return
-            }
-
-            self.delegate?.debugLog?(message: "[PUSHER DEBUG] Network reachable")
-
-            switch self.connectionState {
-            case .disconnecting, .connecting, .reconnecting:
-                // If in one of these states then part of the connection, reconnection, or explicit
-                // disconnection process is underway, so do nothing
-                return
-            case .disconnected:
-                // If already disconnected then reset connection and try to reconnect, provided the
-                // state isn't disconnected because of an intentional disconnection
-                if !self.intentionalDisconnect { self.resetConnectionAndAttemptReconnect() }
-                return
-            case .connected:
-                // If already connected then we assume that there was a missed network event that
-                // led to a bad connection so we move to the disconnected state and then attempt
-                // reconnection
-                self.delegate?.debugLog?(
-                    message: "[PUSHER DEBUG] Connection state is \(self.connectionState.stringValue()) but received network reachability change so going to call attemptReconnect"
-                )
-                self.resetConnectionAndAttemptReconnect()
-                return
-            }
-        }
-        reachability?.whenUnreachable = { [weak self] reachability in
-            guard let self = self else {
-                print("Your Pusher instance has probably become deallocated. See https://github.com/pusher/pusher-websocket-swift/issues/109 for more information")
-                return
-            }
-
-            self.delegate?.debugLog?(message: "[PUSHER DEBUG] Network unreachable")
-            self.resetConnectionAndAttemptReconnect()
-        }
-        return reachability
-    }()
 
     /**
         Initializes a new PusherConnection with an app key, websocket, URL, options and URLSession
@@ -288,7 +244,6 @@ import Starscream
     open func disconnect() {
         if self.connectionState == .connected {
             intentionalDisconnect = true
-            self.reachability?.stopNotifier()
             updateConnectionState(to: .disconnecting)
             self.socket.disconnect()
         }
@@ -308,7 +263,6 @@ import Starscream
             self.socket.connect()
             if self.options.autoReconnect {
                 // can call this multiple times and only one notifier will be started
-                _ = try? reachability?.startNotifier()
             }
         }
     }
