@@ -1,5 +1,5 @@
 import Foundation
-// import Starscream
+import Starscream
 
 @objcMembers
 @objc open class PusherConnection: NSObject {
