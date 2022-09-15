@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/SuaMusica/pusher-websocket-swift'
   s.license          = 'MIT'
   s.author           = { "Pusher Limited" => "support@pusher.com" }
-  s.source           = { git: "https://github.com/SuaMusica/pusher-websocket-swift.git", tag: s.version.to_s }
+  s.source           = { git: "git://github.com/denislfernandez/pusher-websocket-swift.git", tag: s.version.to_s }
   s.social_media_url = 'https://twitter.com/pusher'
 
   s.swift_version = '5.0'
